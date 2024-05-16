@@ -1,0 +1,271 @@
+for v in primes do // !!!!!!!!Need to change this list to PoBR!!!!.
+      print "Current prime: ", v;
+      Qv := pAdicField(v, 10);
+      Qvt := PolynomialRing(Qv);
+      /*
+      if forall{t: t in g| t ge 0} then //print "Field at infinity is Real so continuing";
+ ior v in primes do // !!!!!!!!Need to change this list to PoBR!!!!.
+      print "Current prime: ", v;
+      Qv := pAdicField(v, 10);
+      Qvt := PolynomialRing(Qv);
+      /*
+      if forall{t: t in g| t ge 0} then //print "Field at infinity is Real so continuing";
+      continue;
+      end if;
+      */
+
+  /*********************************************************************************
+          //it might be a good idea to introduce this change of precision in
+          //relavant functions which require high enough precision rather than
+          //a high precision. The idea is to overshoot precision when
+          //necessary but output the results in relatively low precision
+          //because the hilbert's symbol computation does not require really
+          //high precision. 
+  ********************************************************************************/
+      prec := SuggestedPrecision(Qvt!f);
+      Qv := ChangePrecision(Qv,prec); Qvt := ChangeRing(Qvt, Qv); 
+      prec := SuggestedPrecision(Qvt!f)+ 80; Qv := ChangePrecision(Qv, prec);
+      Qvt := ChangeRing(Qvt, Qv);
+      fv := Qvt!f;
+      //print "final precision: ", prec;
+      if forall{d : d in g | IsSquare(Qv!d)} then 
+      print "no computation needed as all di are squares", v; 
+      LocCtpVal := [1,1,1,1,1];
+      continue; end if;
+      KtoKv := CompEmbd(defpolK, K, Qvt.1);
+      gv := <Qv!d : d in g>;
+      //print "gv : ", gv;
+      Kv := Codomain(KtoKv);
+      //print "Kv is unramified", IsUnramified(Kv);
+      sqrtgv := <KtoKv(sq): sq in sqrtg>;
+      //print [sqrtgv[t]^2- Kv!gv[t]: t in [1..l]];
+          //compute the localization of the Pgv matrix
+      Pgv := ChangeRing(Pg, KtoKv);
+      //[Valuation(p): p in ElementToSequence(Pgv)];
+      Cv := BaseChange(C, Qv);
+      Jv := BaseChange(J, Qv);
+      flag := false;
+      count := 1000;
+      while not flag do
+        count := count + 1000;  
+        flag, MumPols := findlocPt(fv, gv, WPts, count ,false); //find a local point on J
+          //corresponding to g over Qv in the Mumford representation. ********
+      end while;
+        locPt := Jv!MumPols;
+          //Compute half of the local point locpt in Mumford representation.
+      flag, Pv := pAdicIsDouble(BaseChange(Jv,Kv)!locPt); //***************************** 
+      Pv := ElementToSequence(Pv);
+      //print "local point and half of point computed";    
+      //print "local point : ", MumPols; print "half point : ", Pv;
+          
+      //As of now we do not need to compute Mv or Cv (unless we later find
+          //out that compting them gives us significant computational speedup)
+          
+          //Mv := MatMv(Pv, Pgv, gv);   //Compute Mij and Mii ************
+          //Cv := MatCv(Pv, Pgv, gv);   //Compute Cij and Cii ************
+
+      G,m := AutomorphismGroup(Kv, Qv);
+LocCtpVal := [];
+        gpv := <Qv!d : d in gp>;
+        //print "gpv : ", gpv;
+        for i in [1..l] do
+          dp := gpv[i];
+          //print "entering a prime zone";
+                // if dp is square in the base field then the Hilbert symbol will be
+                // trivial hence we continue. However, I should check the for loops and
+                // updates in the ctpMat carefully.
+         if IsSquare(Qv!dp) then Append(~LocCtpVal, 1); continue; end if;
+          //print "dp was not a square in Qv. dp : ", dp;
+                  //check if dp is a square in Kv 
+          if IsSquare(Kv!dp) then
+          //print "dp was a square in Kv. dp : ", dp;
+          //print "dp is a unit", Valuation(dp);
+            sqrtdp := SquareRoot(Kv!dp);
+            H := sub<G | Identity(G)>;
+            for h in G do 
+              if (h notin H and locEltEq(m(h)(sqrtdp), sqrtdp)) then H := sub<G| H, h>; end if;
+            end for;
+                      //compute a representative of non-triv of coset of G/H
+            nontrivrep := G.1;
+            for h in G do if h notin H then nontrivrep := h; break; end if; end for;
+          else 
+          //print "dp was not a square in Kv. dp : ", dp;
+            H := G; nontrivrep := Identity(G);
+          end if;
+          //Compute local 1-cocycle to apply Hilber90
+          //print "computing 1 cocycle";
+          //return Pv, WPts, ChangeRing(fv, Kv);
+         // return m, H, WPts, Pv, i, ChangeRing(fv, Kv), <KtoKv(sq): sq in sqrtg>, Pgv, nontrivrep;
+          onecocyc := Comp1Cocyc(m, H, WPts, Pv,i , ChangeRing(fv, Kv), 
+                      <KtoKv(sq): sq in sqrtg>, Pgv);
+          
+          //print "computing hilbert 90 elt";
+          h90elt := H90pAdic(m, onecocyc);//Compute the
+                  //Hilber90 element for the given 1-cocycle
+                  //****************************
+            //Compute the value \gamma1,v(g,g) for computing
+                //\delta_vi*******************************
+          //print "computing delta"; 
+          //print "Valuation of h90elt:", Valuation(h90elt);
+          DelAtdp := (CompDiagVal(Pv, m(nontrivrep), <KtoKv(sqdv): sqdv
+                  in sqrtg>,i, WPts, Pgv, ChangeRing(fv, Kv)))/((m(nontrivrep)(h90elt))*h90elt);
+          //print "DelAtdp is a unit", IsUnit(DelAtdp);      
+          pr := quo<IntegerRing(Kv)| UniformizingElement(Kv)^(Precision(DelAtdp)-5)>;
+          ramind := RamificationIndex(Kv); valdel := Valuation(Kv!DelAtdp);
+          //print valdel, Precision(DelAtdp);
+          //if valdel ne 0 then print "at prime:", v;
+          //print"Valuation of DelAtdp:", valdel;
+          //end if;
+          //Parent(valdel), Parent(ramind);
+          assert IsDivisibleBy(valdel, ramind);
+          if valdel lt 0 then DelAtdp := DelAtdp*((Qv!(v^2))^(-valdel div ramind)); end if;  
+          //print dp, ElementToSequence(DelAtdp);
+          //print "DelAtdp is unit", IsUnit(DelAtdp);
+          //{t: t in G| pr!DelAtdp eq pr!(m(t)(DelAtdp))};
+          //return DelAtdp;
+          if forall{t: t in Generators(G)| pr!DelAtdp eq pr!(m(t)(DelAtdp))} then
+            NmDel := Norm(DelAtdp, Qv); 
+            polDel := Polynomial([-Qv!NmDel] cat [0: t in [1..#G-1]] cat [1]);
+            rtsDel := [r[1]: r in Roots(polDel, Qv)];
+            //#rtsDel;
+            pr := quo<IntegerRing(Kv)| UniformizingElement(Kv)^(ramind*Precision(rtsDel[1]))>;
+          try 
+            DelAtdp := [t : t in rtsDel| pr!t eq pr!DelAtdp][1]; 
+          catch e
+         DelAtdp; end try;
+          DelAtdp;
+Append(~LocCtpVal,pAdicHilbSym(DelAtdp, dp));
+          else error "inc prec"; end if;
+      end for;
+      print "local ctp val :", LocCtpVal, &*LocCtpVal;
+end for;
+     continue;
+      end if;
+      */
+
+  /*********************************************************************************
+          //it might be a good idea to introduce this change of precision in
+          //relavant functions which require high enough precision rather than
+          //a high precision. The idea is to overshoot precision when
+          //necessary but output the results in relatively low precision
+          //because the hilbert's symbol computation does not require really
+          //high precision. 
+  ********************************************************************************/
+      prec := SuggestedPrecision(Qvt!f);
+      Qv := ChangePrecision(Qv,prec); Qvt := ChangeRing(Qvt, Qv); 
+      prec := SuggestedPrecision(Qvt!f)+ 80; Qv := ChangePrecision(Qv, prec);
+      Qvt := ChangeRing(Qvt, Qv);
+      fv := Qvt!f;
+      //print "final precision: ", prec;
+      if forall{d : d in g | IsSquare(Qv!d)} then 
+      print "no computation needed as all di are squares", v; 
+      LocCtpVal := [1,1,1,1,1];
+      continue; end if;
+      KtoKv := CompEmbd(defpolK, K, Qvt.1);
+      gv := <Qv!d : d in g>;
+      //print "gv : ", gv;
+      Kv := Codomain(KtoKv);
+      //print "Kv is unramified", IsUnramified(Kv);
+      sqrtgv := <KtoKv(sq): sq in sqrtg>;
+      //print [sqrtgv[t]^2- Kv!gv[t]: t in [1..l]];
+          //compute the localization of the Pgv matrix
+      Pgv := ChangeRing(Pg, KtoKv);
+      //[Valuation(p): p in ElementToSequence(Pgv)];
+      Cv := BaseChange(C, Qv);
+      Jv := BaseChange(J, Qv);
+      flag := false;
+      count := 1000;
+      while not flag do
+        count := count + 1000;  
+        flag, MumPols := findlocPt(fv, gv, WPts, count ,false); //find a local point on J
+          //corresponding to g over Qv in the Mumford representation. ********
+      end while;
+        locPt := Jv!MumPols;
+          //Compute half of the local point locpt in Mumford representation.
+      flag, Pv := pAdicIsDouble(BaseChange(Jv,Kv)!locPt); //***************************** 
+      Pv := ElementToSequence(Pv);
+      //print "local point and half of point computed";    
+      //print "local point : ", MumPols; print "half point : ", Pv;
+          
+      //As of now we do not need to compute Mv or Cv (unless we later find
+          //out that compting them gives us significant computational speedup)
+          
+          //Mv := MatMv(Pv, Pgv, gv);   //Compute Mij and Mii ************
+          //Cv := MatCv(Pv, Pgv, gv);   //Compute Cij and Cii ************
+
+      G,m := AutomorphismGroup(Kv, Qv);
+LocCtpVal := [];
+        gpv := <Qv!d : d in gp>;
+        //print "gpv : ", gpv;
+        for i in [1..l] do
+          dp := gpv[i];
+          //print "entering a prime zone";
+                // if dp is square in the base field then the Hilbert symbol will be
+                // trivial hence we continue. However, I should check the for loops and
+                // updates in the ctpMat carefully.
+         if IsSquare(Qv!dp) then Append(~LocCtpVal, 1); continue; end if;
+          //print "dp was not a square in Qv. dp : ", dp;
+                  //check if dp is a square in Kv 
+          if IsSquare(Kv!dp) then
+          //print "dp was a square in Kv. dp : ", dp;
+          //print "dp is a unit", Valuation(dp);
+            sqrtdp := SquareRoot(Kv!dp);
+            H := sub<G | Identity(G)>;
+            for h in G do 
+              if (h notin H and locEltEq(m(h)(sqrtdp), sqrtdp)) then H := sub<G| H, h>; end if;
+            end for;
+                      //compute a representative of non-triv of coset of G/H
+            nontrivrep := G.1;
+            for h in G do if h notin H then nontrivrep := h; break; end if; end for;
+          else 
+          //print "dp was not a square in Kv. dp : ", dp;
+            H := G; nontrivrep := Identity(G);
+          end if;
+          //Compute local 1-cocycle to apply Hilber90
+          //print "computing 1 cocycle";
+          //return Pv, WPts, ChangeRing(fv, Kv);
+         // return m, H, WPts, Pv, i, ChangeRing(fv, Kv), <KtoKv(sq): sq in sqrtg>, Pgv, nontrivrep;
+          onecocyc := Comp1Cocyc(m, H, WPts, Pv,i , ChangeRing(fv, Kv), 
+                      <KtoKv(sq): sq in sqrtg>, Pgv);
+          
+          //print "computing hilbert 90 elt";
+          h90elt := H90pAdic(m, onecocyc);//Compute the
+                  //Hilber90 element for the given 1-cocycle
+                  //****************************
+            //Compute the value \gamma1,v(g,g) for computing
+                //\delta_vi*******************************
+          //print "computing delta"; 
+          //print "Valuation of h90elt:", Valuation(h90elt);
+          DelAtdp := (CompDiagVal(Pv, m(nontrivrep), <KtoKv(sqdv): sqdv
+                  in sqrtg>,i, WPts, Pgv, ChangeRing(fv, Kv)))/((m(nontrivrep)(h90elt))*h90elt);
+          //print "DelAtdp is a unit", IsUnit(DelAtdp);      
+          pr := quo<IntegerRing(Kv)| UniformizingElement(Kv)^(Precision(DelAtdp)-5)>;
+          ramind := RamificationIndex(Kv); valdel := Valuation(Kv!DelAtdp);
+          //print valdel, Precision(DelAtdp);
+          //if valdel ne 0 then print "at prime:", v;
+          //print"Valuation of DelAtdp:", valdel;
+          //end if;
+          //Parent(valdel), Parent(ramind);
+          assert IsDivisibleBy(valdel, ramind);
+          if valdel lt 0 then DelAtdp := DelAtdp*((Qv!(v^2))^(-valdel div ramind)); end if;  
+          //print dp, ElementToSequence(DelAtdp);
+          //print "DelAtdp is unit", IsUnit(DelAtdp);
+          //{t: t in G| pr!DelAtdp eq pr!(m(t)(DelAtdp))};
+          //return DelAtdp;
+          if forall{t: t in Generators(G)| pr!DelAtdp eq pr!(m(t)(DelAtdp))} then
+            NmDel := Norm(DelAtdp, Qv); 
+            polDel := Polynomial([-Qv!NmDel] cat [0: t in [1..#G-1]] cat [1]);
+            rtsDel := [r[1]: r in Roots(polDel, Qv)];
+            //#rtsDel;
+            pr := quo<IntegerRing(Kv)| UniformizingElement(Kv)^(ramind*Precision(rtsDel[1]))>;
+          try 
+            DelAtdp := [t : t in rtsDel| pr!t eq pr!DelAtdp][1]; 
+          catch e
+         DelAtdp; end try;
+          DelAtdp;
+Append(~LocCtpVal,pAdicHilbSym(DelAtdp, dp));
+          else error "inc prec"; end if;
+      end for;
+      print "local ctp val :", LocCtpVal, &*LocCtpVal;
+end for;
+

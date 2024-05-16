@@ -1,0 +1,125 @@
+locEltEq(a,b)
+input: a, b := Elements in a p-adic field.
+
+return val := true or false depending on if a and b are equal modulo minimum precision of a and
+b.
+
+----------------------------------------------------------------------------------------------------
+
+locPolEq(a,b)
+input: a, b := Elements of polynomial ring in one or many variables.
+
+return val := true and false depending on if a and b are equal in the polynomial ring
+over the residue ring modulo minimum precision of a and b. 
+
+----------------------------------------------------------------------------------------------------
+
+realXGCD(a,b)
+input: a,b := Elements of polynomial ring over real/complex field.
+
+return val := Gcd(a,b), c and d in parent of a and b such that ca+bd = Gcd(a,b).
+Comments := There is a loss of precision in this case and this may accumulate later.
+
+----------------------------------------------------------------------------------------------------
+
+realGCD(a,b)
+input: a,b := Elements of polynomial ring over real/complex field.
+
+return val := Gcd(a,b)
+Comments := There is a loss of precision in this case and this may accumulate later.
+
+----------------------------------------------------------------------------------------------------
+
+realCR(La, Lm)
+input : La, Lm := Sequence of elements with a common parent (in this case polynomial ring
+over real or complex numbers) 
+
+return val := Element e in the parent of elements of La and Lm such that e = La[i] mod
+Lm[i].
+Comments: This function uses realXGCD as a subroutine so there is a loss of precision in
+this step. 
+
+----------------------------------------------------------------------------------------------------
+
+locCR(La, Lm)
+input : La, Lm := Sequence of elements with a common parent (in this case polynomial ring
+over p-adic field) 
+
+return val := Element e in the parent of elements of La and Lm such that e = La[i] mod
+Lm[i].
+Comments: This function uses XGCD as a subroutine so there is a loss of precision in
+this step. 
+
+----------------------------------------------------------------------------------------------------
+
+pAdicH90(m, cocyc)
+input : m := Map : GrpPerm -> Aut(Codomain(cocyc))
+cocyc := Map : GrpPerm -> pAdicFld
+
+return val := an element in the multiplicative group of Codomain of cocyc such that its
+coboundary is cocyc. 
+Comments : Generic function for any p-adic field because it only use locEltEq function
+above. 
+
+----------------------------------------------------------------------------------------------------
+
+pAdicHilbSym(a,b)
+input
+
+
+
+IsPrincipalDivisor(c, Pv, Pvs, f)
+input: c := a subset of roots of f
+Pv := A point on Jacobian given by mumford polynomial representation [a,b, deg(a)];
+Pvs := A point on Jacobian given by mumford polynomial representation [as,bs, deg(as)];
+f := Defining polynomial of the underlying hyperelliptic curve C. 
+
+return val := false if the divisor given by (T_i)_(i\in c) + Pv - Pvs is not principal,
+and true otherwise with the function f \in K(x,y) such that f when looked as an element in 
+K(C) under the natural projection map has the divisor (T_i)_(i\in c) + Pv - Pvs. Here
+K is the base field of definition of the polynomial f and \bar is the hyperelliptic
+involution. 
+
+Comments: In this function some local equalities have to be checked and need to replace eq
+by locPolEq function.
+
+----------------------------------------------------------------------------------------------------
+
+EvalFuncPairing1(g, Pt, f)
+input : g := a pair of polynomials in the ring K[x,y] given as [N, D], where N := a + yb
+and a, b\in K[x], where K is the field of coefficients of f, and D is given as a
+polynomial in K[x]. 
+Pt :=  An array of three elements in K. 
+f := Defining polynomial of the underlying curve C. 
+
+return val := Evaluation of g on the Pt on the hyperelliptic curve represented as a
+triple. The function corresponding to g is N/D and we assume that N/D(pt) \in K^\timee,
+i.e. Pt is not a zero or a pole of N/D.
+
+----------------------------------------------------------------------------------------------------
+
+CompMinRep(n,d,f)
+input : n := a polynomial in K[x,y], 
+d := a polynomial in K[x,y],
+f := defining polynomial of the underlying curve C/K.
+
+return val := <N, D>, with N \in K[x,y] of the form a + yb with a, b\in K[x], D \in K[x],
+such that N/i(D) represents the class of the function n/d in the function field of the
+curve C, where i is the natural injection map of K[x]\hookrightarrow K[x,y].
+
+----------------------------------------------------------------------------------------------------
+
+locAdd(P1, P2, f) 
+input : P1 := A triple with elements of the form [a1, b1, deg(a1)],
+P2 := A tripple with elements of the form [a2, b2, deg(a2)],
+f := Defining polynomial of the underlying curve C. 
+
+return val := error when deg(a1)+ deg(a2) is larger than g+1, where g := deg(f) div 2.
+Otherwise, output a point P3 in the mumford representation [a3, b3, deg(a3)] such that 
+P1 + P2 = P3 on the Jacobian of the curve C. Here P1 and P2 are the points represented by
+the triple P1 and P2 when interpreted in Mumford representation. If deg(a1)+deg(a2) eq g+1
+then the return value is in the form true, P3, pol, such that div(y-pol) eq P1 + P2 +
+\bar(P3), else the return value is of the form false, P3, _.
+
+ 
+ 

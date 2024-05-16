@@ -1,0 +1,97 @@
+> for c in C do 
+for> val:=is_good(c);
+for> if val ne 1 then 
+for|if> print A[Index(C,c)];
+for|if> end if;
+for> end for;
+2
+7
+13
+19
+29
+37
+47
+59
+61
+71
+73
+79
+89
+103
+107
+139
+157
+163
+173
+179
+191
+193
+199
+211
+223
+227
+239
+241
+251
+263
+269
+277
+281
+283
+293
+307
+311
+347
+349
+359
+367
+373
+379
+383
+409
+419
+
+[Interrupted]
+> A:=[179,
+> 191,
+> 193,
+> 199,
+> 211,
+> 223,
+> 227,
+> 239,
+> 241,
+> 251,
+> 263,
+> 269,
+> 277,
+> 281,
+> 283,
+> 293,
+> 307,
+> 311,
+> 347,
+> 349,
+> 359,
+> 367,
+> 373,
+> 379,
+> 383,
+> 409,
+> 419];
+> A;
+[ 179, 191, 193, 199, 211, 223, 227, 239, 241, 251, 263, 269, 277, 281, 283, 
+293, 307, 311, 347, 349, 359, 367, 373, 379, 383, 409, 419 ]
+> F:= [x^5+a: a in A];
+> C:=[HyperellipticCurve(f): f in F];
+> load "search_fast_ms_org.m";
+Loading "search_fast_ms_org.m"
+> for c in C do 
+for> val:= is_good(c);
+for> if val ne 1 then 
+for|if> print A[Index(C,c)];
+for|if> end if;
+for> end for;
+> exit;
+
+Total time: 2044.960 seconds, Total memory usage: 129.53MB

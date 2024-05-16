@@ -1,0 +1,362 @@
+> h := hom<K -> K| K.2, K.1, K.4, K.3, K.5 K.6, K.7>;
+
+>> h := hom<K -> K| K.2, K.1, K.4, K.3, K.5 K.6, K.7>;
+                                            ^
+User error: bad syntax
+> h := hom<K -> K| K.2, K.1, K.4, K.3, K.5, K.6, K.7>;
+> h(eq1) eq eq1;
+true
+> h(eq2) eq eq2;
+true
+> c1 := Coefficients(eq1, P);
+> c2 := Coefficients(eq2, S);
+> gcd1 := Gcd(c1);
+> gcd2 := Gcd(c2);
+> c1:= [O!(t/gcd1): t in c1];
+> c2:= [O!(t/gcd2): t in c2];
+> Factorization(gcd2);
+[
+    <x2, 4>,
+    <x2^5 + A, 1>,
+    <x1, 4>,
+    <x1 - x2, 2>,
+    <x1 - zeta_5*x2, 2>,
+    <x1 + (zeta_5^3 + zeta_5^2 + zeta_5 + 1)*x2, 2>,
+    <x1^5 + A, 1>
+]
+> Factorization(gcd1);
+[
+    <x2, 6>,
+    <x2^5 + A, 1>,
+    <x1, 6>,
+    <x1 - x2, 4>,
+    <x1 - zeta_5*x2, 4>,
+    <x1 + (zeta_5^3 + zeta_5^2 + zeta_5 + 1)*x2, 4>,
+    <x1^5 + A, 1>
+]
+> e1:= &+[P^i*c1[i+1]: i in [0..2]];
+> e2:= &+[P^i*c2[i+1]: i in [0..2]];
+> e2:= &+[S^i*c2[i+1]: i in [0..2]];
+> [IsHomogeneous(c): c in c2];
+[ true, true, true ]
+> [IsHomogeneous(c): c in c1];
+[ true, true, true ]
+> [Degree(c): c in c1];
+[ 8, 6, 4 ]
+> [Degree(c): c in c1];
+[ 8, 6, 4 ]
+> [Degree(c): c in c2];
+[ 6, 5, 4 ]
+> //So e1 and e2 have homogeneous polonomials as their coefficients in P and S respectively these homogenous polynomials do not have same degr\
+ee
+> //Furthermore, we check that these polynomials do not depend on the parameter A.
+> Evaluate(e1, A, 1) eq e1;
+true
+> Evaluate(e2, A, 1) eq e2;
+true
+> e1;
+1/5*(4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^6*x2^2 + 1/5*(24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^3 + 1/5*(16*zeta_5^2 + 16*zeta_5)*x1^5*x2*P + 
+    1/5*(44*zeta_5^3 + 44*zeta_5^2 - 44)*x1^4*x2^4 + 1/5*(-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^4*x2^2*P - 16/5*zeta_5^3*x1^4*P^2 + 
+    1/5*(24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^3*x2^5 + 1/5*(-120*zeta_5^3 - 184*zeta_5^2 - 184*zeta_5 - 120)*x1^3*x2^3*P + 1/5*(-16*zeta_5^3 - 
+    80*zeta_5 - 80)*x1^3*x2*P^2 + 1/5*(4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^2*x2^6 + 1/5*(-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^2*x2^4*P + 
+    1/5*(-136*zeta_5^3 + 60*zeta_5 + 60)*x1^2*x2^2*P^2 + 1/5*(16*zeta_5^2 + 16*zeta_5)*x1*x2^5*P + 1/5*(-16*zeta_5^3 - 80*zeta_5 - 
+    80)*x1*x2^3*P^2 - 16/5*zeta_5^3*x2^4*P^2
+> //clearing the factor of 5 in the denominator of e1 and e2;
+> e1 := 5 *e1;
+> e2 := 5 *e2;
+> e1;
+(4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^6*x2^2 + (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^3 + (16*zeta_5^2 + 16*zeta_5)*x1^5*x2*P + (44*zeta_5^3 + 
+    44*zeta_5^2 - 44)*x1^4*x2^4 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^4*x2^2*P - 16*zeta_5^3*x1^4*P^2 + (24*zeta_5^3 + 24*zeta_5^2 
+    - 24)*x1^3*x2^5 + (-120*zeta_5^3 - 184*zeta_5^2 - 184*zeta_5 - 120)*x1^3*x2^3*P + (-16*zeta_5^3 - 80*zeta_5 - 80)*x1^3*x2*P^2 + (4*zeta_5^3 
+    + 4*zeta_5^2 - 4)*x1^2*x2^6 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^2*x2^4*P + (-136*zeta_5^3 + 60*zeta_5 + 60)*x1^2*x2^2*P^2 + 
+    (16*zeta_5^2 + 16*zeta_5)*x1*x2^5*P + (-16*zeta_5^3 - 80*zeta_5 - 80)*x1*x2^3*P^2 - 16*zeta_5^3*x2^4*P^2
+> c1;
+[
+    1/5*(4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^6*x2^2 + 1/5*(24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^3 + 1/5*(44*zeta_5^3 + 44*zeta_5^2 - 
+        44)*x1^4*x2^4 + 1/5*(24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^3*x2^5 + 1/5*(4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^2*x2^6,
+    1/5*(16*zeta_5^2 + 16*zeta_5)*x1^5*x2 + 1/5*(-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^4*x2^2 + 1/5*(-120*zeta_5^3 - 184*zeta_5^2 - 
+        184*zeta_5 - 120)*x1^3*x2^3 + 1/5*(-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^2*x2^4 + 1/5*(16*zeta_5^2 + 16*zeta_5)*x1*x2^5,
+    -16/5*zeta_5^3*x1^4 + 1/5*(-16*zeta_5^3 - 80*zeta_5 - 80)*x1^3*x2 + 1/5*(-136*zeta_5^3 + 60*zeta_5 + 60)*x1^2*x2^2 + 1/5*(-16*zeta_5^3 - 
+        80*zeta_5 - 80)*x1*x2^3 - 16/5*zeta_5^3*x2^4
+]
+> c1 := 5*c1;
+
+>> c1 := 5*c1;
+          ^
+Runtime error: Bad argument types
+Argument types given: RngIntElt, SeqEnum[RngMPolElt]
+
+> c1 := [5*c:c in c1];
+> c2 := [5*c:c in c2];
+> c1;
+[
+    (4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^6*x2^2 + (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^3 + (44*zeta_5^3 + 44*zeta_5^2 - 44)*x1^4*x2^4 + 
+        (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^3*x2^5 + (4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^2*x2^6,
+    (16*zeta_5^2 + 16*zeta_5)*x1^5*x2 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^4*x2^2 + (-120*zeta_5^3 - 184*zeta_5^2 - 184*zeta_5 - 
+        120)*x1^3*x2^3 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^2*x2^4 + (16*zeta_5^2 + 16*zeta_5)*x1*x2^5,
+    -16*zeta_5^3*x1^4 + (-16*zeta_5^3 - 80*zeta_5 - 80)*x1^3*x2 + (-136*zeta_5^3 + 60*zeta_5 + 60)*x1^2*x2^2 + (-16*zeta_5^3 - 80*zeta_5 - 
+        80)*x1*x2^3 - 16*zeta_5^3*x2^4
+]
+> c2;
+[
+    -16*x1^6 - 48*x1^5*x2 - 84*x1^4*x2^2 - 104*x1^3*x2^3 - 84*x1^2*x2^4 - 48*x1*x2^5 - 16*x2^6,
+    -32*zeta_5^2*x1^5 + (80*zeta_5^3 + 16*zeta_5^2 + 80*zeta_5)*x1^4*x2 + (120*zeta_5^3 + 16*zeta_5^2 + 120*zeta_5)*x1^3*x2^2 + (120*zeta_5^3 + 
+        16*zeta_5^2 + 120*zeta_5)*x1^2*x2^3 + (80*zeta_5^3 + 16*zeta_5^2 + 80*zeta_5)*x1*x2^4 - 32*zeta_5^2*x2^5,
+    (16*zeta_5^3 + 16*zeta_5^2 + 16*zeta_5 + 16)*x1^4 + (16*zeta_5^3 - 64*zeta_5^2 - 64*zeta_5 + 16)*x1^3*x2 + (136*zeta_5^3 + 196*zeta_5^2 + 
+        196*zeta_5 + 136)*x1^2*x2^2 + (16*zeta_5^3 - 64*zeta_5^2 - 64*zeta_5 + 16)*x1*x2^3 + (16*zeta_5^3 + 16*zeta_5^2 + 16*zeta_5 + 16)*x2^4
+]
+> j1 := [Derivative(e1, x1), Derivative(e1,x2)];
+> j2 := [Derivative(e2, x1), Derivative(e2,x2)];
+> J := Matrix(O, 2,2,j1 cat j2);
+> J;
+[(24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^2 + (120*zeta_5^3 + 120*zeta_5^2 - 120)*x1^4*x2^3 + (80*zeta_5^2 + 80*zeta_5)*x1^4*x2*P + 
+    (176*zeta_5^3 + 176*zeta_5^2 - 176)*x1^3*x2^4 + (-160*zeta_5^3 - 96*zeta_5^2 - 96*zeta_5 - 160)*x1^3*x2^2*P - 64*zeta_5^3*x1^3*P^2 + 
+    (72*zeta_5^3 + 72*zeta_5^2 - 72)*x1^2*x2^5 + (-360*zeta_5^3 - 552*zeta_5^2 - 552*zeta_5 - 360)*x1^2*x2^3*P + (-48*zeta_5^3 - 240*zeta_5 - 
+    240)*x1^2*x2*P^2 + (8*zeta_5^3 + 8*zeta_5^2 - 8)*x1*x2^6 + (-80*zeta_5^3 - 48*zeta_5^2 - 48*zeta_5 - 80)*x1*x2^4*P + (-272*zeta_5^3 + 
+    120*zeta_5 + 120)*x1*x2^2*P^2 + (16*zeta_5^2 + 16*zeta_5)*x2^5*P + (-16*zeta_5^3 - 80*zeta_5 - 80)*x2^3*P^2   (8*zeta_5^3 + 8*zeta_5^2 - 
+    8)*x1^6*x2 + (72*zeta_5^3 + 72*zeta_5^2 - 72)*x1^5*x2^2 + (16*zeta_5^2 + 16*zeta_5)*x1^5*P + (176*zeta_5^3 + 176*zeta_5^2 - 176)*x1^4*x2^3 +
+    (-80*zeta_5^3 - 48*zeta_5^2 - 48*zeta_5 - 80)*x1^4*x2*P + (120*zeta_5^3 + 120*zeta_5^2 - 120)*x1^3*x2^4 + (-360*zeta_5^3 - 552*zeta_5^2 - 
+    552*zeta_5 - 360)*x1^3*x2^2*P + (-16*zeta_5^3 - 80*zeta_5 - 80)*x1^3*P^2 + (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^2*x2^5 + (-160*zeta_5^3 - 
+    96*zeta_5^2 - 96*zeta_5 - 160)*x1^2*x2^3*P + (-272*zeta_5^3 + 120*zeta_5 + 120)*x1^2*x2*P^2 + (80*zeta_5^2 + 80*zeta_5)*x1*x2^4*P + 
+    (-48*zeta_5^3 - 240*zeta_5 - 240)*x1*x2^2*P^2 - 64*zeta_5^3*x2^3*P^2]
+[-96*x1^5 - 240*x1^4*x2 - 160*zeta_5^2*x1^4*S - 336*x1^3*x2^2 + (320*zeta_5^3 + 64*zeta_5^2 + 320*zeta_5)*x1^3*x2*S + (64*zeta_5^3 + 64*zeta_5^2
+    + 64*zeta_5 + 64)*x1^3*S^2 - 312*x1^2*x2^3 + (360*zeta_5^3 + 48*zeta_5^2 + 360*zeta_5)*x1^2*x2^2*S + (48*zeta_5^3 - 192*zeta_5^2 - 
+    192*zeta_5 + 48)*x1^2*x2*S^2 - 168*x1*x2^4 + (240*zeta_5^3 + 32*zeta_5^2 + 240*zeta_5)*x1*x2^3*S + (272*zeta_5^3 + 392*zeta_5^2 + 392*zeta_5
+    + 272)*x1*x2^2*S^2 - 48*x2^5 + (80*zeta_5^3 + 16*zeta_5^2 + 80*zeta_5)*x2^4*S + (16*zeta_5^3 - 64*zeta_5^2 - 64*zeta_5 + 16)*x2^3*S^2   
+    -48*x1^5 - 168*x1^4*x2 + (80*zeta_5^3 + 16*zeta_5^2 + 80*zeta_5)*x1^4*S - 312*x1^3*x2^2 + (240*zeta_5^3 + 32*zeta_5^2 + 
+    240*zeta_5)*x1^3*x2*S + (16*zeta_5^3 - 64*zeta_5^2 - 64*zeta_5 + 16)*x1^3*S^2 - 336*x1^2*x2^3 + (360*zeta_5^3 + 48*zeta_5^2 + 
+    360*zeta_5)*x1^2*x2^2*S + (272*zeta_5^3 + 392*zeta_5^2 + 392*zeta_5 + 272)*x1^2*x2*S^2 - 240*x1*x2^4 + (320*zeta_5^3 + 64*zeta_5^2 + 
+    320*zeta_5)*x1*x2^3*S + (48*zeta_5^3 - 192*zeta_5^2 - 192*zeta_5 + 48)*x1*x2^2*S^2 - 96*x2^5 - 160*zeta_5^2*x2^4*S + (64*zeta_5^3 + 
+    64*zeta_5^2 + 64*zeta_5 + 64)*x2^3*S^2]
+> detJ := Determinant(J);
+> detJ;
+(768*zeta_5^3 + 768*zeta_5^2 - 768)*x1^11*x2 + (7680*zeta_5^3 + 7680*zeta_5^2 - 7680)*x1^10*x2^2 + (-1280*zeta_5^3 - 2560*zeta_5^2 - 
+    1280*zeta_5)*x1^10*x2*S + (1536*zeta_5^2 + 1536*zeta_5)*x1^10*P + (27072*zeta_5^3 + 27072*zeta_5^2 - 27072)*x1^9*x2^3 + (-10752*zeta_5^3 - 
+    22144*zeta_5^2 - 10752*zeta_5)*x1^9*x2^2*S + (-7680*zeta_5^3 - 4608*zeta_5^2 - 4608*zeta_5 - 7680)*x1^9*x2*P + (512*zeta_5^3 + 1024*zeta_5^2
+    + 1024*zeta_5 + 512)*x1^9*x2*S^2 + (-2560*zeta_5^2 - 2560*zeta_5 - 2560)*x1^9*P*S + (44352*zeta_5^3 + 44352*zeta_5^2 - 44352)*x1^8*x2^4 + 
+    (-15296*zeta_5^3 - 41152*zeta_5^2 - 15296*zeta_5)*x1^8*x2^3*S + (-46080*zeta_5^3 - 67968*zeta_5^2 - 67968*zeta_5 - 46080)*x1^8*x2^2*P + 
+    (4608*zeta_5^3 + 9216*zeta_5^2 + 9216*zeta_5 + 4608)*x1^8*x2^2*S^2 + (-5376*zeta_5^2 + 6144*zeta_5 - 5376)*x1^8*x2*P*S + (1536*zeta_5^3 - 
+    7680*zeta_5 - 7680)*x1^8*P^2 + (1024*zeta_5 + 1024)*x1^8*P*S^2 + (35520*zeta_5^3 + 35520*zeta_5^2 - 35520)*x1^7*x2^5 + (20608*zeta_5^3 + 
+    8576*zeta_5^2 + 20608*zeta_5)*x1^7*x2^4*S + (-84480*zeta_5^3 - 135168*zeta_5^2 - 135168*zeta_5 - 84480)*x1^7*x2^3*P + (-1152*zeta_5^3 - 
+    11904*zeta_5^2 - 11904*zeta_5 - 1152)*x1^7*x2^3*S^2 + (17152*zeta_5^2 + 76672*zeta_5 + 17152)*x1^7*x2^2*P*S + (-16896*zeta_5^3 + 3840*zeta_5
+    + 3840)*x1^7*x2*P^2 + (2560*zeta_5^3 + 4096*zeta_5 + 4096)*x1^7*x2*P*S^2 + (-7680*zeta_5^3 - 7680*zeta_5^2 + 1536)*x1^7*P^2*S + 
+    (21440*zeta_5^3 + 22080*zeta_5^2 + 21440*zeta_5)*x1^6*x2^5*S + (-70080*zeta_5^3 - 115008*zeta_5^2 - 115008*zeta_5 - 70080)*x1^6*x2^4*P + 
+    (-29568*zeta_5^3 - 87936*zeta_5^2 - 87936*zeta_5 - 29568)*x1^6*x2^4*S^2 + (-100096*zeta_5^2 - 88576*zeta_5 - 100096)*x1^6*x2^3*P*S + 
+    (-34176*zeta_5^3 + 13440*zeta_5 + 13440)*x1^6*x2^2*P^2 + (34560*zeta_5^3 - 33024*zeta_5 - 33024)*x1^6*x2^2*P*S^2 + (34560*zeta_5^3 + 
+    34560*zeta_5^2 - 37632)*x1^6*x2*P^2*S + (-35520*zeta_5^3 - 35520*zeta_5^2 + 35520)*x1^5*x2^7 + (-21440*zeta_5^3 - 22080*zeta_5^2 - 
+    21440*zeta_5)*x1^5*x2^6*S + (-68800*zeta_5^2 - 73600*zeta_5 - 68800)*x1^5*x2^4*P*S + (-31104*zeta_5^3 + 16320*zeta_5 + 16320)*x1^5*x2^3*P^2 
+    + (-44800*zeta_5^3 + 97664*zeta_5 + 97664)*x1^5*x2^3*P*S^2 + (-84480*zeta_5^3 - 84480*zeta_5^2 + 22656)*x1^5*x2^2*P^2*S + (-44352*zeta_5^3 -
+    44352*zeta_5^2 + 44352)*x1^4*x2^8 + (-20608*zeta_5^3 - 8576*zeta_5^2 - 20608*zeta_5)*x1^4*x2^7*S + (70080*zeta_5^3 + 115008*zeta_5^2 + 
+    115008*zeta_5 + 70080)*x1^4*x2^6*P + (29568*zeta_5^3 + 87936*zeta_5^2 + 87936*zeta_5 + 29568)*x1^4*x2^6*S^2 + (68800*zeta_5^2 + 73600*zeta_5
+    + 68800)*x1^4*x2^5*P*S + (-9600*zeta_5^3 - 9600*zeta_5^2 - 10560)*x1^4*x2^3*P^2*S + (-27072*zeta_5^3 - 27072*zeta_5^2 + 27072)*x1^3*x2^9 + 
+    (15296*zeta_5^3 + 41152*zeta_5^2 + 15296*zeta_5)*x1^3*x2^8*S + (84480*zeta_5^3 + 135168*zeta_5^2 + 135168*zeta_5 + 84480)*x1^3*x2^7*P + 
+    (1152*zeta_5^3 + 11904*zeta_5^2 + 11904*zeta_5 + 1152)*x1^3*x2^7*S^2 + (100096*zeta_5^2 + 88576*zeta_5 + 100096)*x1^3*x2^6*P*S + 
+    (31104*zeta_5^3 - 16320*zeta_5 - 16320)*x1^3*x2^5*P^2 + (44800*zeta_5^3 - 97664*zeta_5 - 97664)*x1^3*x2^5*P*S^2 + (9600*zeta_5^3 + 
+    9600*zeta_5^2 + 10560)*x1^3*x2^4*P^2*S + (-7680*zeta_5^3 - 7680*zeta_5^2 + 7680)*x1^2*x2^10 + (10752*zeta_5^3 + 22144*zeta_5^2 + 
+    10752*zeta_5)*x1^2*x2^9*S + (46080*zeta_5^3 + 67968*zeta_5^2 + 67968*zeta_5 + 46080)*x1^2*x2^8*P + (-4608*zeta_5^3 - 9216*zeta_5^2 - 
+    9216*zeta_5 - 4608)*x1^2*x2^8*S^2 + (-17152*zeta_5^2 - 76672*zeta_5 - 17152)*x1^2*x2^7*P*S + (34176*zeta_5^3 - 13440*zeta_5 - 
+    13440)*x1^2*x2^6*P^2 + (-34560*zeta_5^3 + 33024*zeta_5 + 33024)*x1^2*x2^6*P*S^2 + (84480*zeta_5^3 + 84480*zeta_5^2 - 22656)*x1^2*x2^5*P^2*S 
+    + (-768*zeta_5^3 - 768*zeta_5^2 + 768)*x1*x2^11 + (1280*zeta_5^3 + 2560*zeta_5^2 + 1280*zeta_5)*x1*x2^10*S + (7680*zeta_5^3 + 4608*zeta_5^2 
+    + 4608*zeta_5 + 7680)*x1*x2^9*P + (-512*zeta_5^3 - 1024*zeta_5^2 - 1024*zeta_5 - 512)*x1*x2^9*S^2 + (5376*zeta_5^2 - 6144*zeta_5 + 
+    5376)*x1*x2^8*P*S + (16896*zeta_5^3 - 3840*zeta_5 - 3840)*x1*x2^7*P^2 + (-2560*zeta_5^3 - 4096*zeta_5 - 4096)*x1*x2^7*P*S^2 + 
+    (-34560*zeta_5^3 - 34560*zeta_5^2 + 37632)*x1*x2^6*P^2*S + (-1536*zeta_5^2 - 1536*zeta_5)*x2^10*P + (2560*zeta_5^2 + 2560*zeta_5 + 
+    2560)*x2^9*P*S + (-1536*zeta_5^3 + 7680*zeta_5 + 7680)*x2^8*P^2 + (-1024*zeta_5 - 1024)*x2^8*P*S^2 + (7680*zeta_5^3 + 7680*zeta_5^2 - 
+    1536)*x2^7*P^2*S
+> Factorization(detJ);
+[
+    <x1 - x2, 1>,
+    <x1^3 + 3/2*x1^2*x2 + zeta_5^2*x1^2*S + 3/2*x1*x2^2 + 1/2*(-5*zeta_5^3 - 4*zeta_5^2 - 5*zeta_5)*x1*x2*S + x2^3 + zeta_5^2*x2^2*S, 1>,
+    <x1^3*x2 + 3*x1^2*x2^2 + (2*zeta_5^3 + 2)*x1^2*P + x1*x2^3 + (6*zeta_5^3 + 5*zeta_5^2 + 5*zeta_5 + 6)*x1*x2*P + (2*zeta_5^3 + 2)*x2^2*P, 1>,
+    <x1^4 + 13/2*x1^3*x2 + 2/3*zeta_5^2*x1^3*S + 10*x1^2*x2^2 + 1/3*(5*zeta_5^3 + 18*zeta_5^2 + 5*zeta_5)*x1^2*x2*S + (4*zeta_5^3 + 5*zeta_5^2 +
+        5*zeta_5 + 4)*x1^2*P + 13/2*x1*x2^3 + 1/3*(5*zeta_5^3 + 18*zeta_5^2 + 5*zeta_5)*x1*x2^2*S + 1/2*(14*zeta_5^3 + 15*zeta_5^2 + 15*zeta_5 +
+        14)*x1*x2*P + x2^4 + 2/3*zeta_5^2*x2^3*S + (4*zeta_5^3 + 5*zeta_5^2 + 5*zeta_5 + 4)*x2^2*P, 1>
+]
+> Gcd(e1,e2);
+1
+> SymmetricSquare;
+Intrinsic 'SymmetricSquare'
+
+Signatures:
+
+    (A::AlgMat) -> AlgMat
+
+        The symmetric square of the matrix algebra A.
+
+    (X::AlgMatElt) -> AlgMatElt
+
+        The symmetric square of the matrix X.
+
+    (L::Lat) -> Lat
+
+        The symmetric square of lattice L.
+
+    (M::ModRng) -> ModRng
+
+        The symmetric square of M (obtained by taking the symmetric square of each action generator of M).
+
+
+> SymmetricComponents;
+Intrinsic 'SymmetricComponents'
+
+Signatures:
+
+    (x::AlgChtrElt, n::RngIntElt) -> SetEnum
+
+        Return the symmetrizations of x by all partitions of m (2 <= m <= n <= 6).
+
+
+> SymmetricFunctionAlgebraElementary;
+Intrinsic 'SymmetricFunctionAlgebraElementary'
+
+Signatures:
+
+    (R::Rng) -> AlgSym
+
+        The algebra of symmetric polynomials, expressed over the basis of the symmetric Elementary functions.
+
+
+> IsSymmetric;
+Intrinsic 'IsSymmetric'
+
+Signatures:
+
+    (D::Dsgn) -> BoolElt
+
+        True iff the design D is symmetric.
+
+    (G::GrpPerm) -> BoolElt
+
+        True iff the permutation group G is the symmetric group.
+
+    (G::GrphUnd) -> BoolElt
+
+        True iff the graph G is symmetric.
+
+    (X::Mtrx) -> BoolElt
+
+        True iff X is a symmetric matrix (i.e., iff X equals its transpose).
+
+    (X::MtrxSprs) -> BoolElt
+
+        True iff X is symmetric.
+
+    (F::RngMPolElt) -> BoolElt
+
+        True iff F is a symmetric polynomial; if true, also return a polynomial G which, when evaluated in the elementary symmetric polynomials,
+        equals F.
+
+    (F::RngMPolElt, J::RngMPol) -> BoolElt
+
+        True iff F is a symmetric polynomial; if true, also return a polynomial G of J which, when evaluated in the elementary symmetric 
+        polynomials, equals F.
+
+    (T::TenSpc) -> BoolElt
+
+        Decides if the tensor space is symmetric.
+
+    (t::TenSpcElt) -> BoolElt
+
+        Decides if t is symmetric.
+
+
+> bool, m := IsSymmetric(e1);
+
+[PC] While attempting to compile /usr/local/magma/package/Module/Multilinear/TensorSpace-2.2/Tensor/TensorBasic.m (Source file newer than data 
+[PC] file):
+[PC] Can't open lock file /usr/local/magma/package/Module/Multilinear/TensorSpace-2.2/Tensor/TensorBasic.lck for writing (Permission denied)
+
+[PC] While attempting to compile /usr/local/magma/package/Module/Multilinear/TensorSpace-2.2/TensorSpace/TensorSpcBasic.m (Source file newer 
+[PC] than data file):
+[PC] Can't open lock file /usr/local/magma/package/Module/Multilinear/TensorSpace-2.2/TensorSpace/TensorSpcBasic.lck for writing (Permission 
+[PC] denied)
+> bool, m := IsSymmetric(e1);
+> m;
+
+>> m;
+   ^
+User error: Identifier 'm' has not been declared or assigned
+> bool, m := IsSymmetric(e1);
+> m;
+
+>> m;
+   ^
+User error: Identifier 'm' has not been declared or assigned
+> bool, e1 := IsSymmetric(e1);
+> e1
+> ;
+
+>> e1
+   ^
+User error: Identifier 'e1' has not been declared or assigned
+> e1:= &+[P^i*c1[i+1]: i in [0..2]];
+> e1 := 5 *e1;
+> bool, e1 := IsSymmetric(e1,O);
+> e1;
+
+>> e1;
+   ^
+User error: Identifier 'e1' has not been declared or assigned
+> IsSymmetric
+> ;
+Intrinsic 'IsSymmetric'
+
+Signatures:
+
+    (D::Dsgn) -> BoolElt
+
+        True iff the design D is symmetric.
+
+    (G::GrpPerm) -> BoolElt
+
+        True iff the permutation group G is the symmetric group.
+
+    (G::GrphUnd) -> BoolElt
+
+        True iff the graph G is symmetric.
+
+    (X::Mtrx) -> BoolElt
+
+        True iff X is a symmetric matrix (i.e., iff X equals its transpose).
+
+    (X::MtrxSprs) -> BoolElt
+
+        True iff X is symmetric.
+
+    (F::RngMPolElt) -> BoolElt
+
+        True iff F is a symmetric polynomial; if true, also return a polynomial G which, when evaluated in the elementary symmetric polynomials,
+        equals F.
+
+    (F::RngMPolElt, J::RngMPol) -> BoolElt
+
+        True iff F is a symmetric polynomial; if true, also return a polynomial G of J which, when evaluated in the elementary symmetric 
+        polynomials, equals F.
+
+    (T::TenSpc) -> BoolElt
+
+        Decides if the tensor space is symmetric.
+
+    (t::TenSpcElt) -> BoolElt
+
+        Decides if t is symmetric.
+
+
+> bool;
+false
+> c1;
+[
+    (4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^6*x2^2 + (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^5*x2^3 + (44*zeta_5^3 + 44*zeta_5^2 - 44)*x1^4*x2^4 + 
+        (24*zeta_5^3 + 24*zeta_5^2 - 24)*x1^3*x2^5 + (4*zeta_5^3 + 4*zeta_5^2 - 4)*x1^2*x2^6,
+    (16*zeta_5^2 + 16*zeta_5)*x1^5*x2 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^4*x2^2 + (-120*zeta_5^3 - 184*zeta_5^2 - 184*zeta_5 - 
+        120)*x1^3*x2^3 + (-40*zeta_5^3 - 24*zeta_5^2 - 24*zeta_5 - 40)*x1^2*x2^4 + (16*zeta_5^2 + 16*zeta_5)*x1*x2^5,
+    -16*zeta_5^3*x1^4 + (-16*zeta_5^3 - 80*zeta_5 - 80)*x1^3*x2 + (-136*zeta_5^3 + 60*zeta_5 + 60)*x1^2*x2^2 + (-16*zeta_5^3 - 80*zeta_5 - 
+        80)*x1*x2^3 - 16*zeta_5^3*x2^4
+]
+> bool, c:= IsSymmetric(c1[1], O);
+> c;
+
+>> c;
+   ^
+User error: Identifier 'c' has not been declared or assigned
+> bool;
+false
