@@ -34,4 +34,8 @@ the thesis. In order to execute them, one can just simple load these files in ma
 using load "ex4_5_x.m", where x is 5, 6 or 8. The value of the CTP is stored in the
 variable *ctpval*. 
 
-**Remark:** Due to an error in the code (found later than when the thesis was printed and submitted) and now fixed, the result of the pairing in Example 4.5.6 does not match the output from the program ex4_5_6.m. The file realCTP.m (currently under development) will fix this. 
+**Remark:** Due to an error in the code (found later than when the thesis was printed and submitted) and now fixed, the result of the pairing in Example 4.5.6 does not match the output from the program ex4_5_6.m. The file realCTP.m (currently under development) will fix this.
+
+**Remark:** file realctp.m has been added to fix the problems in the previous remark. A
+new example has been added to the file ex4_5_6.m where CTP reduces the rank bound
+non-trivially.  
