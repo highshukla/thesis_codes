@@ -23,7 +23,7 @@ $S^{(2)}(J/K)/\mathrm{Im}(J(K)[2])$. The curve must be hyperelliptic of
 the form $y^2=f(x)$, with $\mathrm{deg}(f)$ as odd, $f$ being monic and $f$ 
 splits completely over $K$. The following are the magma commands to execute the code. 
 
-- load "main.m";
+- load "main_nf.m";
 - f := *defining polynomial of odd degree that splits over $K$*;
 - C := HyperellipticCurve(f); 
 - compctp(C);
