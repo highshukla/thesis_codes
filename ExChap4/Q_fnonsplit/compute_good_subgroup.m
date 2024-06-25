@@ -439,13 +439,18 @@ function good_subgroup(known_part, SGtoA)
   for i := 1 to #ff do
     K := NumberField(ff[i] : DoLinearExtension); // DoLinearExtension is necessary to guarantee K.1 = root
     ei := K.1;
+    k := AbsoluteField(K); Ok := MaximalOrder(k); bask := Basis(Ok);
     PK := PolynomialRing(K);
     for j := i to #ff do
       for f1 in [e[1] : e in Factorization(PK!ff[j]) | Evaluate(e[1], ei) ne 0] do
         L := ext<K | f1 : DoLinearExtension>;
+        ktoL := hom<k-> L| Roots(DefiningPolynomial(k),L)[1][1]>;
+        Ol := MaximalOrder(L); basl := Basis(Ol);
         LL := AbsoluteField(L);
+        basLL := &cat[[(LL!ktoL(b1))*(LL!b2): b2 in basl]: b1 in bask];
+        Oll := Order(basLL); OLL := MaximalOrder(Oll); 
         ej := LL!L.1;
-        OLL := MaximalOrder(LL);  
+       // OLL := MaximalOrder(LL);  
       //for p in bad do OLL := pMaximalOrder(OLL, p); end for; 
         primes := &cat[[e[1] : e in Decomposition(OLL, p)] : p in bad];
         // The two maps from A to LL corresponding to theta |--> e_i and theta |--> e_j

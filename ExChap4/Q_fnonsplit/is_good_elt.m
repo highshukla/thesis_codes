@@ -1,3 +1,23 @@
+function x_minus_T(pt, f, A, AtoSG)
+  // Compute the image of a point pt on the Jacobian of a genus 2 curve y^2 = f(x)
+  // in the Selmer group. AtoSG is the (partially defined) map from the étale algebra A
+  // to the Selmer group.
+  a := pt[1]; // a-polynomial of Mumford representation
+  fact_a := [e[1] : e in Factorization(a) | IsOdd(e[2])]; // squares map to 1
+  result := A!1;
+  for fa in fact_a do
+    c := (-1)^Degree(fa)*Evaluate(fa, A.1);
+    flag, quot := IsDivisibleBy(f, fa);
+    if flag then
+      c +:= (-1)^Degree(quot)*Evaluate(quot, A.1);
+    end if;
+    result *:= c;
+  end for;
+  return AtoSG(result);
+end function;
+
+
+
 function invert_SGtoA(SGtoA)
   // Produce a map that inverts SGtoA.
   // (There are more efficient ways of doing this, but this should be OK.)
@@ -36,12 +56,16 @@ function goodness_tests(SGtoA)
     K := NumberField(ff[i] : DoLinearExtension); // DoLinearExtension is necessary to guarantee K.1 = root
     ei := K.1;
     PK := PolynomialRing(K);
+    k := AbsoluteField(K); Ok := MaximalOrder(k); bask := Basis(Ok);
     for j := i to #ff do
       for f1 in [e[1] : e in Factorization(PK!ff[j]) | Evaluate(e[1], ei) ne 0] do
         L := ext<K | f1 : DoLinearExtension>;
+        ktoL := hom<k-> L| Roots(DefiningPolynomial(k),L)[1][1]>;
+        Ol := MaximalOrder(L); basl := Basis(Ol);
         LL := AbsoluteField(L);
+        basLL := &cat[[(LL!ktoL(b1))*(LL!b2): b2 in basl]: b1 in bask];
+        Oll := Order(basLL); OLL := MaximalOrder(Oll);
         ej := LL!L.1;
-        OLL := MaximalOrder(LL);  
       //for p in bad do OLL := pMaximalOrder(OLL, p); end for; 
         primes := &cat[[e[1] : e in Decomposition(OLL, p)] : p in bad];
         // The two maps from A to LL corresponding to theta |--> e_i and theta |--> e_j
